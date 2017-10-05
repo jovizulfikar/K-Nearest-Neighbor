@@ -24,7 +24,7 @@ public class KNN {
        double [] pendapatanBulan = {2000000, 2500000,4000000,5000000
                ,5350000,7000000,500000,700000,1500000,1000000,1750000};
        double [] frekuensiMakan = {3,2,2,4,3,5,0.5,1,2,1,2};
-       String [] kategori = {"sedang","sedang","sedang","kaya","kaya","kaya","miskin","miskin","miskin","miskin"}; 
+       String [] kategori = {"sedang","sedang","sedang","kaya","kaya","kaya","miskin","miskin","miskin","miskin","?"}; 
             
        double rata2LuasBangunan,rata2PendapatanBulan,rata2FrekuensiMakan;
        double stdevLuasBangunan,stdevPendapatanBulan,stdevFrekuensiMakan;
@@ -48,17 +48,14 @@ public class KNN {
       zscore(zScorePendapatanBulan, pendapatanBulan, stdevPendapatanBulan, rata2PendapatanBulan);
       
       zscore(zScoreFrekuensiMakan, frekuensiMakan, stdevFrekuensiMakan, rata2FrekuensiMakan);
-      
-        System.out.println("  "+stdevFrekuensiMakan+" "+stdevLuasBangunan+" "+stdevPendapatanBulan);
-      
+            
         euclidian(euclidean, zScoreLuasBangunan, zScorePendapatanBulan, zScoreFrekuensiMakan);
         voteKaya = weightKaya(euclidean);
         voteMiskin = weightMiskin(euclidean);
         voteSedang = weightSedang(euclidean);
-        System.out.println(voteKaya);
-        System.out.println(voteMiskin);
-        System.out.println(voteSedang);
-        System.out.println(Arrays.toString(euclidean));
+        tampil(luasBangunan, pendapatanBulan, frekuensiMakan, kategori, rata2LuasBangunan, rata2PendapatanBulan, rata2FrekuensiMakan, stdevLuasBangunan, stdevPendapatanBulan, stdevFrekuensiMakan, zScoreLuasBangunan, zScorePendapatanBulan, zScoreFrekuensiMakan, euclidean, voteKaya, voteMiskin, voteSedang);
+       
+        
     }
     
     public static double rata2(double [] arrayData){
@@ -80,18 +77,7 @@ public class KNN {
     }
     
     public static double stdev(double [] arrayData){
-      
-//         double ratarata = rata2(arrayData);
-//         double akarjum = 0;
-//         double x;
-//         double rataPankat = Math.pow(ratarata,2);
-//         for (int i=0;i<arrayData.length;i++){
-//             x = Math.pow(arrayData[i],2);
-//         akarjum += x;
-//        }
-//          akarjum= akarjum/arrayData.length;
-//         return Math.sqrt(akarjum-rataPankat);
-        
+       
         double X = 0;
         for (int i = 0; i < arrayData.length; i++) {
             X += Math.pow(arrayData[i], 2);        
@@ -107,8 +93,6 @@ public class KNN {
     public static void zscore(double zscore[], double input[], double std, double rata2){
         for (int i = 0; i < zscore.length; i++) {
             zscore[i] = (input[i] - std)/rata2;
-//            System.out.println(zscore[i]);
-//            System.out.println("");
         }
     }
     
@@ -139,6 +123,42 @@ public class KNN {
     kaya = (1/Math.pow(arrayData[6], 2))+(1/Math.pow(arrayData[7], 2))+(1/Math.pow(arrayData[8], 2))+(1/Math.pow(arrayData[9], 2));
     return kaya;
     }
+      
+      public static void tampil(double [] luasBangunan,double [] pendapatanBulan, double [] frekuensiMakan,String [] kategori, double rata2luasBangunan, double rata2pendapatanBulan,double rata2frekuensiMakan, double stdevluasBangunan,double stdevpendapatnBulan,double stdevfrekuensiMakan,double [] zScoreLuasBangunan,double [] zPendapatanBulan, double [] zScoreFrekuensiMakan, double [] euclidean, double voteKaya, double voteMiskin, double voteSedang){
+          System.out.println("Data Awal:");
+          System.out.println("Luas Bangunan\t\tPendapatan Bulanan\t\tFrekuensiMakan\t\tKategori");
+          for (int i = 0; i < luasBangunan.length; i++) {
+              System.out.println(luasBangunan[i]+"\t\t\t"+pendapatanBulan[i]+"\t\t\t"+frekuensiMakan[i]+"\t\t\t"+kategori[i]);    
+              }
+          System.out.println("\nRata-rata Luas Bangunan:"+rata2luasBangunan);
+          System.out.println("Rata-rata Pendapatan Bulanan:"+rata2pendapatanBulan);
+          System.out.println("Rata-rata Frekuensi:"+rata2frekuensiMakan);
+          
+          System.out.println("\nStandar Deviasi Luas Bangunan:"+stdevluasBangunan);
+          System.out.println("Standar Deviasi Pendapatan Bulanan:"+stdevpendapatnBulan);
+          System.out.println("Standar Deviasia Frekuensi:"+stdevfrekuensiMakan);
+          
+          System.out.println("\nZ-Score Luas Bangunan\t\tZ-Score Pendapatan Bulanan\t\tZ-Score FrekuensiMakan");
+          for (int i = 0; i < luasBangunan.length; i++) {
+              System.out.println(zScoreLuasBangunan[i]+"\t\t\t"+zPendapatanBulan[i]+"\t\t\t"+zScoreFrekuensiMakan[i]);    
+              }
+          
+           System.out.println("\nEuclidean");
+          for (int i = 0; i < euclidean.length; i++) {
+              System.out.println(euclidean[i]);    
+              }
+          
+          System.out.println("\nWeighted");
+          System.out.println("VoteKaya:"+voteKaya);
+          System.out.println("VoteMiskin:"+voteMiskin);
+          System.out.println("VoteSedang:"+voteSedang);
+          
+          
+       
+          System.out.println("\nKarena paling besar adalah Kaya maka class yang dicari adalah Kaya");
+          
+      }
+      
     
     
 }
